@@ -1,0 +1,11 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "All rights reserved"
+
+[[mods]]
+modId = "vasatorka"
+version = "1.0.0"
+displayName = "Vasatorka"
+description = """
+Mod with the boss Vasyl and the weapon Tail of Aloy.
+"""
