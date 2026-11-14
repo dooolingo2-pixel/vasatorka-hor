@@ -4,10 +4,35 @@
     {
       "rolls": 1,
       "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "vasatorka:tail_of_aloy"
-        }
+        { "type": "minecraft:item", "name": "vasatorka:tail_of_aloy" }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [ { "condition": "minecraft:random_chance", "chance": 0.4 } ],
+      "entries": [
+        { "type": "minecraft:item", "name": "vasatorka:aloy_helmet" }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [ { "condition": "minecraft:random_chance", "chance": 0.3 } ],
+      "entries": [
+        { "type": "minecraft:item", "name": "vasatorka:aloy_chestplate" }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [ { "condition": "minecraft:random_chance", "chance": 0.3 } ],
+      "entries": [
+        { "type": "minecraft:item", "name": "vasatorka:aloy_leggings" }
+      ]
+    },
+    {
+      "rolls": 1,
+      "conditions": [ { "condition": "minecraft:random_chance", "chance": 0.4 } ],
+      "entries": [
+        { "type": "minecraft:item", "name": "vasatorka:aloy_boots" }
       ]
     }
   ]
