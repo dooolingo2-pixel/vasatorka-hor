@@ -9,16 +9,12 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 public class VasylEntity extends Warden {
@@ -34,9 +30,15 @@ public class VasylEntity extends Warden {
 
     public static AttributeSupplier createBossAttributes() {
         return Warden.createAttributes()
-                .add(Attributes.MAX_HEALTH, 300.0D)
+                .add(Attributes.MAX_HEALTH, 250.0D)
                 .add(Attributes.ATTACK_DAMAGE, 14.0D)
                 .build();
+    }
+
+    // Гопники для Василя свої: він на них не нападає
+    @Override
+    public boolean isAlliedTo(Entity other) {
+        return other instanceof GopnikEntity || super.isAlliedTo(other);
     }
 
     @Override
@@ -64,16 +66,15 @@ public class VasylEntity extends Warden {
     }
 
     private void summonGopnik(ServerLevel level, LivingEntity target) {
-        Zombie zombie = new Zombie(level);
+        GopnikEntity gopnik = new GopnikEntity(VasatorkaMod.GOPNIK.get(), level);
         double x = this.getX() + (this.random.nextDouble() - 0.5D) * 6.0D;
         double z = this.getZ() + (this.random.nextDouble() - 0.5D) * 6.0D;
-        zombie.setPos(x, this.getY(), z);
-        zombie.setBaby(true);
-        zombie.setCustomName(Component.literal("Гопник"));
-        zombie.setCustomNameVisible(true);
-        zombie.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Items.LEATHER_HELMET));
-        zombie.setTarget(target);
-        level.addFreshEntity(zombie);
+        gopnik.setPos(x, this.getY(), z);
+        gopnik.setBaby(true);
+        gopnik.setCustomName(Component.literal("Гопник"));
+        gopnik.setCustomNameVisible(true);
+        gopnik.setTarget(target);
+        level.addFreshEntity(gopnik);
     }
 
     // Кожен удар Василя отруює
