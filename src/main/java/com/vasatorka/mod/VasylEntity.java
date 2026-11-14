@@ -16,6 +16,8 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.scores.PlayerTeam;
+import net.minecraft.world.scores.Scoreboard;
 
 public class VasylEntity extends Warden {
     private final ServerBossEvent bossEvent = new ServerBossEvent(
@@ -35,17 +37,16 @@ public class VasylEntity extends Warden {
                 .build();
     }
 
-    // Гопники для Василя свої: він на них не нападає
-    @Override
-    public boolean isAlliedTo(Entity other) {
-        return other instanceof GopnikEntity || super.isAlliedTo(other);
-    }
-
     @Override
     public void aiStep() {
         super.aiStep();
         if (this.level() instanceof ServerLevel serverLevel) {
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+
+            // Василь і гопники в одній команді, тому не б'ють один одного
+            if (this.getTeam() == null) {
+                joinGang(serverLevel, this);
+            }
 
             // Завжди агресивний: раз на секунду "лютує" на найближчого гравця
             if (this.tickCount % 20 == 0) {
@@ -65,6 +66,15 @@ public class VasylEntity extends Warden {
         }
     }
 
+    private static void joinGang(ServerLevel level, Entity entity) {
+        Scoreboard scoreboard = level.getScoreboard();
+        PlayerTeam team = scoreboard.getPlayerTeam("vasyl_gang");
+        if (team == null) {
+            team = scoreboard.addPlayerTeam("vasyl_gang");
+        }
+        scoreboard.addPlayerToTeam(entity.getStringUUID(), team);
+    }
+
     private void summonGopnik(ServerLevel level, LivingEntity target) {
         GopnikEntity gopnik = new GopnikEntity(VasatorkaMod.GOPNIK.get(), level);
         double x = this.getX() + (this.random.nextDouble() - 0.5D) * 6.0D;
@@ -74,6 +84,7 @@ public class VasylEntity extends Warden {
         gopnik.setCustomName(Component.literal("Гопник"));
         gopnik.setCustomNameVisible(true);
         gopnik.setTarget(target);
+        joinGang(level, gopnik);
         level.addFreshEntity(gopnik);
     }
 
