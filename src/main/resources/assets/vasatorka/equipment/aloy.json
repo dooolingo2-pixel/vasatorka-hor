@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "humanoid": [
+      { "texture": "vasatorka:aloy" }
+    ],
+    "humanoid_leggings": [
+      { "texture": "vasatorka:aloy" }
+    ]
+  }
+}
